@@ -24,8 +24,9 @@ python3 /your-path-to-the-project/encoding_video.py
 -t '/your-path-to-the-project/encoding_results.xlsx' \
 -v 'CPU' -m psnr ssim vmaf
 
+```
 ## Results
-```bash
+
 
   energy and CO2 emissions     |  Encoding time                |  CPU and memory usage         | 
 :-----------------------------:|:-----------------------------:|:-----------------------------:|
