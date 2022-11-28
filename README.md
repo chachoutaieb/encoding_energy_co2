@@ -29,13 +29,13 @@ python3 /your-path-to-the-project/encoding_video.py
 ```
   energy and CO2 emissions     |  Encoding time                |  CPU and memory usage         | 
 :-----------------------------:|:-----------------------------:|:-----------------------------:|
- ![](figures/Bar_dataset.jpg)  | ![](bar_cpu_memory_time.jpg)  |  ![](line_dataset time.jpg)   |
+ ![](figures/Bar_dataset.jpg)  | ![](figures/bar_cpu_memory_time.jpg)  |  ![](figures/line_dataset time.jpg)   |
  
  ### quality
  ```
-           PSNR                |             SSIM              |              VMAF             | 
-:-----------------------------:|:-----------------------------:|:-----------------------------:|
- ![](figures/Bar_dataset.jpg)  | ![](bar_cpu_memory_time.jpg)  |  ![](line_dataset time.jpg)   |
+           PSNR                |             SSIMfigures/|              VMAF             | 
+:-----------------------------:|:-----------------------------:|:----------------------figures/-------:|
+ ![](figures/Bar_daet.jpg)  | ![](figures/bar_cpu_memory_ti.jpg)  |  ![](figures/ time.jpg)   |
 
 
 
