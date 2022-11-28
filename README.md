@@ -21,10 +21,6 @@ pip3 install -r requirements.txt
 
 ```bash
 
-python3 '/your-path-to-the-project/Predection_Treanscoding_Time_Algorithm.py' \
--p '/your-path-to-the-project' \
--o 'all_method' 
-
 python3 /your-path-to-the-project/encoding_video.py
 -s /your-path-to-the-project/original_dataset \
 -t '/your-path-to-the-project/encoding_results.xlsx' \
