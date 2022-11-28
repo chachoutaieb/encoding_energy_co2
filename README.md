@@ -25,7 +25,7 @@ python3 /your-path-to-the-project/encoding_video.py
 -v 'CPU' -m psnr ssim vmaf
 energy and CO2 emissions   |  Encoding time               |  CPU and memory usage        | 
 :-----------------------------:|:----------------------------:|:-----------------------------:
-![](figures/Bar_dataset.pdf)   |  ![](figures/Bar_dataset.pdf)      ![](figures/Bar_dataset.pdf)
+![](figures/Bar_dataset.jpg)   |  ![](figures/Bar_dataset.jpg)      ![](figures/Bar_dataset.jpg)
 
 
 
