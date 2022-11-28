@@ -17,8 +17,6 @@ pip3 install -r requirements.txt
 
 ## Usage
 
-### 1. Performace evaluation of XGBoost model with other machine learning model
-
 ```bash
 
 python3 /your-path-to-the-project/encoding_video.py
