@@ -24,11 +24,18 @@ python3 /your-path-to-the-project/encoding_video.py
 -t '/your-path-to-the-project/encoding_results.xlsx' \
 -v 'CPU' -m psnr ssim vmaf
 
+## results
 
 ```
   energy and CO2 emissions     |  Encoding time                |  CPU and memory usage         | 
 :-----------------------------:|:-----------------------------:|:-----------------------------:|
- ![](figures/Bar_dataset.jpg)  | ![](figures/Bar_dataset.jpg)  |  ![](figures/Bar_dataset.jpg) |
+ ![](figures/Bar_dataset.jpg)  | ![](bar_cpu_memory_time.jpg)  |  ![](line_dataset time.jpg)   |
+ 
+ ### quality
+ ```
+           PSNR                |             SSIM              |              VMAF             | 
+:-----------------------------:|:-----------------------------:|:-----------------------------:|
+ ![](figures/Bar_dataset.jpg)  | ![](bar_cpu_memory_time.jpg)  |  ![](line_dataset time.jpg)   |
 
 
 
