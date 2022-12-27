@@ -28,7 +28,10 @@ python3 /your-path-to-the-project/encoding_video.py
 
 ```
 ## Results
+
 ### Encoding performace (Energy, CO2 emissions, Encoding time, CPU and memory usage)
+
+
 
   Energy and CO2 emissions     |  CPU and memory usage         |  Encoding time                | 
 :-----------------------------:|:-----------------------------:|:-----------------------------:
@@ -37,6 +40,7 @@ python3 /your-path-to-the-project/encoding_video.py
 
  
  ### Quality
+ 
  
  
    PSNR     |  SSIM         |  VMAF                | 
