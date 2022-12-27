@@ -28,8 +28,9 @@ python3 /your-path-to-the-project/encoding_video.py
 
 ```
 ## Results
+### Encoding performace (Energy, CO2 emissions, Encoding time, CPU and memory usage)
 
-  energy and CO2 emissions     |  CPU and memory usage         |  Encoding time                | 
+  Energy and CO2 emissions     |  CPU and memory usage         |  Encoding time                | 
 :-----------------------------:|:-----------------------------:|:-----------------------------:
  ![](figures/Bar_dataset.jpg)  | ![](figures/bar_cpu_memory_time.jpg)  |  ![](figures/line_dataset_time.jpg)   
 
