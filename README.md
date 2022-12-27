@@ -13,7 +13,9 @@ pip3 install -r requirements.txt
 ## Download Dataset
 
 - [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
-- [x] [Encoded dataset](https://drive.google.com/uc?export=download&id=1ahQP7uaV7-ENN5bSBzgW3GAN72bnya6s)
+- [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz.
+
+Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
 
@@ -34,9 +36,9 @@ python3 /your-path-to-the-project/encoding_video.py
  
  ### Quality
  ```
-           PSNR                |             SSIMfigures/|              VMAF             | 
-:-----------------------------:|:-----------------------------:|:----------------------figures/-------:
- ![](figures/Bar_daet.jpg)  | ![](figures/bar_cpu_memory_ti.jpg)  |  ![](figures/ time.jpg)   |
+           PSNR                |             SSIM              |              VMAF             | 
+:-----------------------------:|:-----------------------------:|:------------------------------:
+ ![](figures/Bar_daet.jpg)  | ![](figures/bar_cpu_memory_ti.jpg)  |  ![](figures/ time.jpg)    |
 
 
 
