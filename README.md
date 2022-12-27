@@ -38,8 +38,8 @@ python3 /your-path-to-the-project/encoding_video.py
  ```
            PSNR                |             SSIM              |              VMAF             | 
 :-----------------------------:|:-----------------------------:|:------------------------------:
- ![](figures/line_dataset PSNR.jpg)  | ![](figures/line_dataset SSIM.jpg)  |  ![](figures/line_dataset VMAF.jpg)    |
+ ![](figures/line_dataset_PSNR.jpg)  | ![](figures/line_dataset_SSIM.jpg)  |  ![](figures/line_dataset_VMAF.jpg)    |
 :-----------------------------:|:-----------------------------:|:------------------------------:
- ![](figures/dataset_BD rate (PSNR)_relative_Energy.jpg)  | ![](figures/dataset_BD rate (SSIM)_relative_Energy.jpg)  |  ![](figures/dataset_BD rate (VMAF)_relative_Energy.jpg)    |
+ ![](figures/dataset_BD_rate_(PSNR)_relative_Energy.jpg)  | ![](figures/dataset_BD_rate_(SSIM)_relative_Energy.jpg)  |  ![](figures/dataset_BD_rate_(VMAF)_relative_Energy.jpg)    |
 
 
