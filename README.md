@@ -1,5 +1,5 @@
-# Energy and Carbon Emissions of Modern Video Encoders
-In this project,  we provide a comparative study between different video encoder standard namely H.264/AVC, H.265/HEVC, VVC, VP9, and AV1,  in terms of quality, energy consumption and carbon emissions. This study allows  to better understand the trade-off between quality and encoding carbon emissions of different encoder and determine which one is the most appropriate for climate change.
+# Energy Consumption and Carbon Emissions of Modern Video Encoders
+In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of quality, energy consumption and CO2 emissions. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
 
 ## Install 
 
@@ -38,7 +38,8 @@ python3 /your-path-to-the-project/encoding_video.py
  ```
            PSNR                |             SSIM              |              VMAF             | 
 :-----------------------------:|:-----------------------------:|:------------------------------:
- ![](figures/Bar_daet.jpg)  | ![](figures/bar_cpu_memory_ti.jpg)  |  ![](figures/ time.jpg)    |
-
+ ![](figures/line_dataset PSNR.jpg)  | ![](figures/line_dataset SSIM.jpg)  |  ![](figures/line_dataset VMAF.jpg)    |
+:-----------------------------:|:-----------------------------:|:------------------------------:
+ ![](figures/dataset_BD rate (PSNR)_relative_Energy.jpg)  | ![](figures/dataset_BD rate (SSIM)_relative_Energy.jpg)  |  ![](figures/dataset_BD rate (VMAF)_relative_Energy.jpg)    |
 
 
