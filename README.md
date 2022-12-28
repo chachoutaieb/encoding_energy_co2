@@ -19,6 +19,7 @@ pip3 install -r requirements.txt
 
 - [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
 - [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz.
+
 Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
@@ -27,7 +28,7 @@ Note : make all the downloaded dataset in the dataset directory
 
 python3 /your-path-to-the-project/encoding_video.py
 -s /your-path-to-the-project/original_dataset \
--t '/your-path-to-the-project/encoding_results.xlsx' \
+-r '/your-path-to-the-project/encoding_results.xlsx' \
 -m psnr ssim vmaf
 
 # you will see
