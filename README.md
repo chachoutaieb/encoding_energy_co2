@@ -7,9 +7,11 @@ In this project, we provide a comparative study between five leading video codin
 ```bash
 git clone https://github.com/chachoutaieb/encoding_energy_co2.git
 pip3 install -r requirements.txt
-- [x][Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
-Install VVdeC(https://github.com/fraunhoferhhi/vvdec)
-Install ffmpeg 5
+
+```
+- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
+- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
+- Install ffmpeg 5
 
 ```
 
@@ -17,7 +19,6 @@ Install ffmpeg 5
 
 - [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
 - [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz.
-
 Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
