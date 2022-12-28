@@ -31,7 +31,7 @@ python3 /your-path-to-the-project/encoding_video.py
 -m psnr ssim vmaf
 
 # you will see
-
+```
 ```diff
 green : Encoded video is ready
 ```
@@ -50,7 +50,7 @@ green : Encoded video is ready
 +--------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
 
 
-```
+
 ## Results
 
 ### Encoding performance (Energy, CO2 emissions, Encoding time, CPU and memory usage)
