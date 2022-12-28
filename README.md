@@ -7,6 +7,9 @@ In this project, we provide a comparative study between five leading video codin
 ```bash
 git clone https://github.com/chachoutaieb/encoding_energy_co2.git
 pip3 install -r requirements.txt
+Install VVenC from https://github.com/fraunhoferhhi/vvenc
+Install VVdeC from https://github.com/fraunhoferhhi/vvdec
+Install ffmpeg 5
 
 ```
 
