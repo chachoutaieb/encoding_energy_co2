@@ -28,7 +28,9 @@ Note : make all the downloaded dataset in the dataset directory
 python3 /your-path-to-the-project/encoding_video.py
 -s /your-path-to-the-project/original_dataset \
 -t '/your-path-to-the-project/encoding_results.xlsx' \
--v 'CPU' -m psnr ssim vmaf
+-e '/your-path-to/vvencapp
+-d '/your-path-to/vvdecapp
+-m psnr ssim vmaf
 
 ```
 ## Results
