@@ -32,7 +32,9 @@ python3 /your-path-to-the-project/encoding_video.py
 
 # you will see
 
-![#c5f015](https://placehold.co/15x15/c5f015/c5f015.png) `#c5f015` : Encoded video is ready
+```diff
+green : Encoded video is ready
+```
 +--------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
 |                      Video                       | Time (s) |Bitrate(kb/s)| Energy (Wh)  |  CO2eq (g)  |  PSNR  |  SSIM  |  VMAF  |
 +--------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
