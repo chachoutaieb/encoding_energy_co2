@@ -1,3 +1,4 @@
+# @Developed by Chachou Taieb (°_^)
 #!/usr/bin/env python3
 import os
 import sys
@@ -27,7 +28,7 @@ usage :
     cp encoding_info_empty.xlsx  encoding_info.xlsx
     **for our project:
 
-        python3 /your-path-to-the-project/encoding_video.py \
+        python3 /your-path-to-the-project/encoding_energy_co2.py \
             -d /your-path-to-the-project/original_dataset \
             -r '/your-path-to-the-project/encoding_results.xlsx' \
             -m psnr ssim vmaf
@@ -35,7 +36,7 @@ usage :
 
     **for your specific video:
 
-        python3 /your-path-to-the-project/encoding_video.py \
+        python3 /your-path-to-the-project/encoding_energy_co2.py \
             -i /your-path-to-the-project/input.yuv \
             -o /your-path-to-the-project/output.yuv \
             -r '/your-path-to-the-project/encoding_results.xlsx' \
@@ -721,12 +722,12 @@ p1.encoding(args['metric'], q, args['platform'], wb0, wb1, wb2, args['pathV'], p
 
 
 """ 
-python3 /your-path-to-the-project/encoding_video.py
+python3 /your-path-to-the-project/encoding_energy_co2.py
 -s /your-path-to-the-project/original_dataset \
 -r '/your-path-to-the-project/encoding_results.xlsx' \
 -m psnr ssim vmaf
 
-python3 /your-path-to-the-project/encoding_video.py \
+python3 /your-path-to-the-project/encoding_energy_co2.py \
 -i /your-path-to-the-project/input.yuv \
 -o /your-path-to-the-project/output.yuv \
 -r '/your-path-to-the-project/encoding_results.xlsx' \
