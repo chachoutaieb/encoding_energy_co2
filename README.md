@@ -45,10 +45,10 @@ python3 /your-path-to-the-project/encoding_video.py \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -s resolution('WxH') \
       -f framerate(fps) \
-      -x bitdepth (8 or 10) \
-      -b Bitrate(kb/s) \
-      -c x264 \
-      -p 'Platform type (CPU or GPU)' \
+      -x bit depth (8 or 10) \
+      -b Bitrate (kb/s) \
+      -c codec (x264, x265, vp9, svt-av1, vvenc) \
+      -p Platform type (CPU or GPU) \
       -m psnr ssim 
 ```    
   
