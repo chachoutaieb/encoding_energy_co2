@@ -40,8 +40,8 @@ python3 /your-path-to-the-project/encoding_video.py
 
 ```bash
 python3 /your-path-to-the-project/encoding_video.py \
-      -i '/your-path-to-the-project/input.yuv (.yuv, .y4m, .mp4, etc.)' \
-      -o '/your-path-to-the-project/output.mp4 (.mp4, .266, .265, etc.)' \
+      -i '/your-path-to-the-project/inputVideo.yuv (.yuv, .y4m, .mp4, etc.)' \
+      -o '/your-path-to-the-project/outputVideo.mp4 (.mp4, .266, .265, etc.)' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -s resolution('WxH') \
       -f framerate(fps) \
