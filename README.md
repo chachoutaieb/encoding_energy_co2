@@ -24,9 +24,9 @@ Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
 
-```bash
+- To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx and with estimation of the energy , co2 emissions, CPU or GPU usage, etc. we use the following command:
 
-**To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx and with estimation of the energy , co2 emissions, CPU or GPU usage, etc. we use the following command:
+```bash
 
 
 python3 /your-path-to-the-project/encoding_video.py
@@ -34,9 +34,11 @@ python3 /your-path-to-the-project/encoding_video.py
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -p 'platform type (CPU or GPU)'
       -m psnr ssim vmaf
+```
 
-**To encode your own video with estimation of the energy, co2 emissions, CPU or GPU usage, etc. we use the following command:
+- To encode your own video with estimation of the energy, co2 emissions, CPU or GPU usage, etc. we use the following command:
 
+```bash
 python3 /your-path-to-the-project/encoding_video.py \
       -i '/your-path-to-the-project/input.yuv (.yuv, .y4m, .mp4, etc.)' \
       -o '/your-path-to-the-project/output.mp4 (.mp4, .266, .265, etc.)' \
@@ -48,9 +50,13 @@ python3 /your-path-to-the-project/encoding_video.py \
       -c x264 \
       -p 'Platform type (CPU or GPU)' \
       -m psnr ssim 
-      
-      
+```    
+    
 ## Note : On the GPU platform, the max bit depth for x264 is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for x264 codec. You can find more information about that here that (https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new)
+
+```bash
+
+# you will see
 
 green : Encoded video is ready
 
