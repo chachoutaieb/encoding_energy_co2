@@ -18,7 +18,7 @@ pip3 install -r requirements.txt
 ## Download Dataset
 
 - [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
-- [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz.
+- [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou@gmail.com with Cc sfezza@ensttic.dz and Wassim.Hamidouche@insa-rennes.fr.
 
 Note : make all the downloaded dataset in the dataset directory
 
