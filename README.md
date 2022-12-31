@@ -53,7 +53,7 @@ python3 /your-path-to-the-project/encoding_video.py \
 ```    
   
   
-###### Note : On the GPU platform, the max bit depth for x264 is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that here that (https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new)
+**Note : On the GPU platform, the max bit depth for x264 is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new)
 
 
 
