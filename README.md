@@ -29,18 +29,18 @@ Note : make all the downloaded dataset in the dataset directory
 ```bash
 
 
-python3 /your-path-to-the-project/encoding_energy_co2.py
-      -s /your-path-to-the-project/original_dataset \
+python3 '/your-path-to-the-project/encoding_energy_co2.py' \
+      -s '/your-path-to-the-project/original_dataset' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
-      -p 'platform type (CPU or GPU)'
-      -sp 'preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast)
+      -p platform type (CPU or GPU) \
+      -sp preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast) \
       -m psnr ssim vmaf
 ```
 
 - To encode your own video with estimation of the energy, co2 emissions, CPU or GPU usage, etc. we use the following command:
 
 ```bash
-python3 /your-path-to-the-project/encoding_energy_co2.py \
+python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -i '/your-path-to-the-project/inputVideo.yuv (.yuv, .y4m, .mp4, etc.)' \
       -o '/your-path-to-the-project/outputVideo.mp4 (.mp4, .266, .265, etc.)' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
@@ -50,7 +50,7 @@ python3 /your-path-to-the-project/encoding_energy_co2.py \
       -b Bitrate (kb/s) \
       -c codec (x264, x265, vp9, svt-av1, vvenc) \
       -p Platform type (CPU or GPU) \
-      -sp 'preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast)
+      -sp preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast) \
       -m psnr ssim 
 ```    
   
