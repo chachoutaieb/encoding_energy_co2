@@ -31,6 +31,7 @@ usage :
         python3 /your-path-to-the-project/encoding_energy_co2.py \
             -d /your-path-to-the-project/original_dataset \
             -r '/your-path-to-the-project/encoding_results.xlsx' \
+            -p 'CPU'
             -m psnr ssim vmaf
 
 
@@ -201,7 +202,7 @@ class video_encoding:
                 break
 	
 	
-    def encoding(self, metric, q, platform, wb0, wb1, wb2, pathV, pxl_fmtV, bitV, resV, fpsV, codec, output1s):
+    def encoding(self, metric, q, platform, wb0, wb1, wb2, pathV, pxl_fmtV, bitV, resV, fpsV, codec, speed, output1s):
        
         
         if platform != 'GPU':
@@ -223,12 +224,20 @@ class video_encoding:
         self.stop_threads = False
         proc_name = 'ffmpeg'
         #'libx265', 
-        codec_name = ['x264', 'x265', 'vp9', 'vvenc', 'svt-av1']
-        codec_cpu = ['libx264', 'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1']
+        codec_name = ['x264', 'x265', 'vp9', 'vvenc', 'svt-av1']#, 
+        codec_cpu = ['libx264' ,'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1'] 
         codec_gpu = ['h264_nvenc', 'hevc_nvenc']
         codec_list_cpu = []
         codec_list_gpu = []
-            
+        if  platform == 'CPU':
+            if speed == 'veryslow':
+                preset = ['veryslow', '0', '3', 'medium']
+            elif speed == 'faster':
+                preset = ['ultrafast', '8', '12', 'faster']
+            elif speed == 'fast':
+                preset = ['superfast', '7', '11', 'fast']
+        elif platform == 'GPU':
+            preset = [speed]
         if pathV != None:
             if  platform == 'CPU':
                 print(codec)
@@ -238,13 +247,13 @@ class video_encoding:
                 else :
                     print('please select one codec from this list', codec_name)
             else:
-                if codec in codec_name:
-                    ind = codec_name.index(codec)
+                if codec in codec_gpu:
+                    ind = codec_gpu.index(codec)
                     codec_list_gpu = [codec_gpu[ind]]
                 else :
-                    print('please select one codec from this list', codec_name[0:2])
+                    print('please select one codec from this list', codec_gpu[0:2])
         else :
-            codec_list_cpu = ['libx264', 'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1']
+            codec_list_cpu = ['libx264', 'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1']#, 
             codec_list_gpu = ['h264_nvenc', 'hevc_nvenc']
             
             
@@ -284,7 +293,8 @@ class video_encoding:
                 codec_list = codec_list_gpu
                 psnr_col = 28
             elif platform == 'CPU':
-                interval = 0.3
+                
+                
                 codec_list = codec_list_cpu
                 psnr_col = 23
             if fps == 50 or fps == 60:
@@ -315,9 +325,9 @@ class video_encoding:
                         os.makedirs(os.path.join(self.project_path, 'encoded_video'), exist_ok=True)
                         os.makedirs(os.path.join(self.project_path, 'output'), exist_ok=True)
                         if c == 'VVenC' :  
-                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'.266'
+                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'_'+speed+'.266'
                         else:
-                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'.mp4'
+                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'_'+speed+'.mp4'
                         if pathV != None:
                             output1 = output1s
                             vid_trans = os.path.basename(output1s)
@@ -331,34 +341,54 @@ class video_encoding:
                         if (otp == False or idv == None) :
                             time_p = os.path.join(self.project_path, 'output', 'time.txt')
                             if c == 'libx264' or c == 'libx265':
+                                if speed == 'veryslow':
+                                    interval = 0.3
+                                elif speed in ['faster' ,'fast']:
+                                    if c == 'libx264':
+                                        interval = 0.04
+                                    elif c == 'libx265':
+                                        interval = 0.1
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset veryslow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    
                                 else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset veryslow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                          
                             elif c == 'libvpx-vp9':
+                                if speed == 'veryslow':
+                                    interval = 2
+                                elif speed in ['faster' ,'fast']:
+                                    interval = 1
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed 0 -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                 else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed 0 -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     
                             elif c == 'libaom-av1':
                                  proc_name = 'ffmpeg'
                                  if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used 8 -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                  else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used  8 -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(encod_path)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used  '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(encod_path)+' 2>&1 | grep "bench: utime" > '+time_p
                             
                             elif c == 'libsvtav1':
+                                 if speed == 'veryslow':
+                                    interval = 0.5
+                                 elif speed in ['faster' ,'fast']:
+                                    interval = 0.2
                                  proc_name = 'ffmpeg'
                                  if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset 3 -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                  else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset 3 -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                             
                             elif c == 'VVenC' : 
+                                if speed == 'veryslow':
+                                    interval = 3
+                                elif speed in ['faster' ,'fast']:
+                                    interval = 1
                                 proc_name = 'vvencapp'
                                 if pxl_fmt == 'yuv420p10le' :
                                     pxl_fmt1 = 'yuv420_10'
@@ -371,20 +401,20 @@ class video_encoding:
                                 output1 = os.path.join(self.project_path, 'encoded_video', vid_trans)
                                 output1_yuv = os.path.join(self.project_path, 'encoded_video', vid_trans_yuv)
                                
-                                envid = VVenC_path[0]+' --preset medium -i '+str(input1)+' -c '+str(pxl_fmt1)+' -s '+str(res)+' --internal-bitdepth '+str(bitd)+' -r '+str(fps)+' -b '+str(btr)+'k -t 16 -o '+str(output1)+'  2>&1 > '+encVVCtxt 
-                                devid = VVdeC_path[0]+'" -b '+str(output1)+' -o '+str(output1_yuv)
+                                envid = VVenC_path[0]+' --preset '+preset[3]+' -i '+str(input1)+' -c '+str(pxl_fmt1)+' -s '+str(res)+' --internal-bitdepth '+str(bitd)+' -r '+str(fps)+' -b '+str(btr)+'k -t 16 -o '+str(output1)+'  2>&1 > '+encVVCtxt 
+                                devid = VVdeC_path[0]+' -b '+str(output1)+' -o '+str(output1_yuv)
                                 
                             elif c == 'hevc_nvenc' :
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark  -vsync 0 -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset slow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark  -vsync 0 -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
                                 else:
-                                    envid = 'ffmpeg -y -benchmark -hwaccel auto  -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset slow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -hwaccel auto  -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
                             
                             elif c == 'h264_nvenc' :
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark  -vsync 0 -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+'  -pix_fmt '+str('yuv420p')+' -preset slow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark  -vsync 0 -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+'  -pix_fmt '+str('yuv420p')+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
                                 else:
-                                    envid = 'ffmpeg -y -benchmark -hwaccel auto  -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str('yuv420p')+' -preset slow -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -hwaccel auto  -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str('yuv420p')+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
                                 #flt = '[1:v]format=pix_fmts=yuv420p[ref]; [ref]'
                             self.stop_threads = False
                             if os.path.exists('emissions.csv')== True:
@@ -430,8 +460,9 @@ class video_encoding:
                                     print("xlsx file for CO2 emission not existe")
                             else :
                                 print("csv file for CO2 emission not existe")
-                            energy = sheet5.cell(row = 2, column = 6).value  
-                            co2 = float(sheet5.cell(row = 2, column = 5).value)*1000
+                            energy = sheet5.cell(row = 2, column = 13).value  
+                            energy = float(energy)*1000 #kwh to wh
+                            co2 = float(sheet5.cell(row = 2, column = 5).value)*1000# kg to g
                             duration = sheet5.cell(row = 2, column = 4).value
                             btrtxt = os.path.join(self.project_path, 'output', 'btr.txt')
                             if c == 'VVenC':
@@ -471,6 +502,7 @@ class video_encoding:
                             sheet2.cell(row = idv, column = 4).value = float(t3.split('=')[-1]) #'Rtime'
                             sheet2.cell(row = idv, column = 5).value = float(tf) #'Algo time'
                             sheet2.cell(row = idv, column = 6).value = int(float(btr)) #'Bitrate'
+                            
                             if  platform == 'CPU':
                                 #print(self.info_sys_all)
                                 info_cpu = np.array(self.info_sys_all, dtype="object")
@@ -488,7 +520,7 @@ class video_encoding:
                                 sheet2.cell(row = idv, column = 16).value = float(duration) #'Time
                                 sheet2.cell(row = idv, column = 17).value = float(energy) #'Energy GPU'
                                 sheet2.cell(row = idv, column = 18).value = float(co2) #'carbon'
-                                sheet2.cell(row = idv, column = 19).value = float(co2)/122.4 #'This is equivalent to: km travelled by car'
+                                sheet2.cell(row = idv, column = 19).value = float(co2)/120.4 #'This is equivalent to: km travelled by car'
                                 psnr_col = 20
                             elif platform == 'GPU':
                                 info_gpu = np.array(self.info_sys_all_gpu, dtype="object")
@@ -512,14 +544,14 @@ class video_encoding:
                                 sheet2.cell(row = idv, column = 16).value = float(max_info_cpu[9]) #'%Memory FFmpeg'
                                 sheet2.cell(row = idv, column = 17).value = float(max_info_gpu[0]) #'%GPU'
                                 sheet2.cell(row = idv, column = 18).value = int(max_info_gpu[6]) #'Temperature'
-                                sheet2.cell(row = idv, column = 19).value = float(energy) #'Energy GPU'
+                                sheet2.cell(row = idv, column = 19).value = float(max_info_gpu[5]) #'%Used GPU'
                                 sheet2.cell(row = idv, column = 20).value = int(max_info_gpu[1]) #'Total GPU (MB)' 
                                 sheet2.cell(row = idv, column = 21).value = int(min_info_gpu[2]) #'Free GPU (MB)'
                                 sheet2.cell(row = idv, column = 22).value = int(max_info_gpu[3]) #'Used GPU (MB)'
                                 sheet2.cell(row = idv, column = 23).value = int(max_info_gpu[4]) #'Used GPU FFmpeg (MB)'
-                                sheet2.cell(row = idv, column = 24).value = float(max_info_gpu[5]) #'%Used GPU'
-                                sheet2.cell(row = idv, column = 25).value = float(co2)/1000 #'carbon'
-                                sheet2.cell(row = idv, column = 26).value = float(co2)/1000/122.4 #'This is equivalent to: km travelled by car'
+                                sheet2.cell(row = idv, column = 24).value = float(energy) #'Energy GPU'
+                                sheet2.cell(row = idv, column = 25).value = float(co2) #'carbon'
+                                sheet2.cell(row = idv, column = 26).value = float(co2)/120.4 #'This is equivalent to: km travelled by car'
                                 psnr_col = 27
                                 
                                 
@@ -531,12 +563,20 @@ class video_encoding:
                             co = float(co2)
                             vname = vid_trans
                         else:
-                            vname = fg.green +"{:^50}".format(vid_trans)+ fg.rs
-                            tim = sheet2.cell(row = idv, column = 4).value
-                            bit = sheet2.cell(row = idv, column = 6).value
-                            enrg = sheet2.cell(row = idv, column = 17).value
-                            co = sheet2.cell(row = idv, column = 18).value
-                            psnr_col = 20
+                            if platform == 'CPU':
+                                vname = fg.green +"{:^50}".format(vid_trans)+ fg.rs
+                                tim = sheet2.cell(row = idv, column = 4).value
+                                bit = sheet2.cell(row = idv, column = 6).value
+                                enrg = sheet2.cell(row = idv, column = 17).value
+                                co = sheet2.cell(row = idv, column = 18).value
+                                psnr_col = 20
+                            elif platform == 'GPU':
+                                vname = fg.green +"{:^50}".format(vid_trans)+ fg.rs
+                                tim = sheet2.cell(row = idv, column = 4).value
+                                bit = sheet2.cell(row = idv, column = 6).value
+                                enrg = sheet2.cell(row = idv, column = 24).value
+                                co = sheet2.cell(row = idv, column = 25).value
+                                psnr_col = 27
                            
                         vvmaf = 0
                         vpsnr = 0
@@ -599,8 +639,8 @@ class video_encoding:
                                 vvmaf = float(a.readlines()[0].rstrip())
                                 sheet2.cell(row = idv, column = psnr_col+2).value = float(vvmaf)
                             
-                        core = "|{:^50}|{:^10.4}| {:^11} | {:^10.12} |{:^13.11}|{:^8.2f}|{:^8.2f}|{:^8.2f}|"
-                        print(core.format(vname, tim, bit, str(enrg), str(co), vpsnr, vssim ,vvmaf))
+                        core = "|{:^50}|{:^10.4}| {:^11} | {:^10.10f} |{:^13.9f}|{:^8.2f}|{:^8.2f}|{:^8.2f}|"
+                        print(core.format(vname, tim, bit, float(enrg), float(co), vpsnr, vssim ,vvmaf))
                         print("".join(line1))
                         wb2.save(self.results)
 			            
@@ -620,6 +660,7 @@ ap.add_argument("-r", "--results", help="Path to results")
 ap.add_argument("-m", "--metric", nargs='+', type=str, help='Metric quatlity')
 ap.add_argument("-p", "--platform", help="Path of encoding video")
 ap.add_argument("-i", "--pathV", help="Path to original video")
+ap.add_argument("-sp", "--speed", help="encoding speed")
 ap.add_argument("-x", "--pxl_fmt", type=int, help="Pixel format of encoding video")
 ap.add_argument("-s", "--resol", help="Resolution of encoding video")
 ap.add_argument("-f", "--fps", type=int, help="Framerate of encoding video")
@@ -630,7 +671,7 @@ args = vars(ap.parse_args())
 if args["pathV"] != None:
     q = [1, 2]
 else:
-    q = [2, 28]
+    q = [9, 10]
 if args["pathV"] != None:
     wb0 = ""
     wb1 = ""
@@ -689,12 +730,12 @@ elif  args['platform'] == 'GPU':
     sheet2.cell(row = 1, column = 16).value = '%Memory FFmpeg'
     sheet2.cell(row = 1, column = 17).value = '%GPU' 
     sheet2.cell(row = 1, column = 18).value = 'Temperature (°C)' 
-    sheet2.cell(row = 1, column = 19).value = 'Energy GPU (Wh)'
+    sheet2.cell(row = 1, column = 19).value = '%Memory GPU'
     sheet2.cell(row = 1, column = 20).value = 'Total GPU (MB)' 
     sheet2.cell(row = 1, column = 21).value = 'Free GPU (MB)'
     sheet2.cell(row = 1, column = 22).value = 'Used GPU (MB)'
     sheet2.cell(row = 1, column = 23).value = 'Used GPU FFmpeg (MB)'
-    sheet2.cell(row = 1, column = 24).value = '%Memory GPU'
+    sheet2.cell(row = 1, column = 24).value = 'Energy GPU (Wh)'
     sheet2.cell(row = 1, column = 25).value = 'CO2 emissions in France (g)'
     sheet2.cell(row = 1, column = 26).value = 'Equivalent of CO2 emissions in distance travelled by car (m)'
     mc = 0
@@ -718,25 +759,28 @@ elif args['pxl_fmt'] == 8:
 else:
     pxl_fmtp = ""
 
-p1.encoding(args['metric'], q, args['platform'], wb0, wb1, wb2, args['pathV'], pxl_fmtp, args['bitrate'], args['resol'], args['fps'], args['codec'], args['outputVideo'])
+p1.encoding(args['metric'], q, args['platform'], wb0, wb1, wb2, args['pathV'], pxl_fmtp, args['bitrate'], args['resol'], args['fps'], args['codec'], args['speed'], args['outputVideo'])
 
 
 """ 
-python3 /your-path-to-the-project/encoding_energy_co2.py
--s /your-path-to-the-project/original_dataset \
--r '/your-path-to-the-project/encoding_results.xlsx' \
--m psnr ssim vmaf
+python3 '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/encoding_energy_co2.py' \
+-d '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/original_dataset' \
+-r '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/encoding_results.xlsx' \
+-p 'CPU' \
+-sp 'faster \
+-m psnr ssim
 
-python3 /your-path-to-the-project/encoding_energy_co2.py \
--i /your-path-to-the-project/input.yuv \
--o /your-path-to-the-project/output.yuv \
--r '/your-path-to-the-project/encoding_results.xlsx' \
+python3 '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/encoding_energy_co2.py' \
+-i '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/original_dataset/BasketballPass_416x240_50.yuv' \
+-o '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/original_dataset/output.mp4' \
+-r '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/encoding_results.xlsx' \
 -s '416x240' \
 -f 50 \
 -x 8 \
 -b 220 \
 -c avc \
 -p 'CPU' \
+-sp 'faster' \
 -m psnr ssim vmaf
 
 """
