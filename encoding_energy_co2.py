@@ -253,7 +253,7 @@ class video_encoding:
                 else :
                     print('please select one codec from this list', codec_gpu[0:2])
         else :
-            codec_list_cpu = ['libx264', 'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1']#, 
+            codec_list_cpu = ['libx264', 'libx265', 'libvpx-vp9' , 'VVenC', 'libsvtav1']#, 
             codec_list_gpu = ['h264_nvenc', 'hevc_nvenc']
             
             
@@ -356,16 +356,21 @@ class video_encoding:
                                     envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                          
                             elif c == 'libvpx-vp9':
+                                proc_name = 'ffmpeg'
                                 if speed == 'veryslow':
                                     interval = 2
+                                    if video_or.split('.')[-1] == 'yuv':
+                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    else :
+                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        
                                 elif speed in ['faster' ,'fast']:
-                                    interval = 1
-                                proc_name = 'ffmpeg'
-                                if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
-                                else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
-                                    
+                                    interval = 0.2
+                                    if video_or.split('.')[-1] == 'yuv':
+                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    else :
+                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        
                             elif c == 'libaom-av1':
                                  proc_name = 'ffmpeg'
                                  if video_or.split('.')[-1] == 'yuv':
@@ -642,11 +647,12 @@ class video_encoding:
                         core = "|{:^50}|{:^10.4}| {:^11} | {:^10.10f} |{:^13.9f}|{:^8.2f}|{:^8.2f}|{:^8.2f}|"
                         print(core.format(vname, tim, bit, float(enrg), float(co), vpsnr, vssim ,vvmaf))
                         print("".join(line1))
-                        wb2.save(self.results)
+                        
 			            
                     pasCodec = pasCodec + 8
             else:
                 print('raw video not exist')
+        wb2.save(self.results)
             
             
     
@@ -671,7 +677,7 @@ args = vars(ap.parse_args())
 if args["pathV"] != None:
     q = [1, 2]
 else:
-    q = [9, 10]
+    q = [2, 28]
 if args["pathV"] != None:
     wb0 = ""
     wb1 = ""
