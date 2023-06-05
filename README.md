@@ -90,6 +90,6 @@ green : Encoded video is ready
 
 ## Results
 
-#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding energy co2.).
+#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding energy co2/).
 
 
