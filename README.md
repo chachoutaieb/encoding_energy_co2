@@ -1,5 +1,5 @@
 # Energy and Carbon Emissions of Modern Video Encoders
-In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of quality, energy consumption and CO2 emissions. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
+In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of quality, energy consumption, CO2 emissions and CPU and memory usage. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
 
 ## Install 
 
@@ -30,11 +30,12 @@ Note : make all the downloaded dataset in the dataset directory
 
 
 python3 '/your-path-to-the-project/encoding_energy_co2.py' \
-      -s '/your-path-to-the-project/original_dataset' \
+      -d '/your-path-to-the-project/original_dataset' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -p platform type (CPU or GPU) \
-      -sp preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast) \
-      -m psnr ssim vmaf
+      -sp preset type (CPU : veryslow, medium, fast, faster | GPU : slow, medium, fast) \
+      -m psnr ssim vmaf  
+      
 ```
 
 - To encode your own video with estimation of the energy, co2 emissions, CPU or GPU usage, etc. we use the following command:
@@ -50,12 +51,12 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -b Bitrate (kb/s) \
       -c codec (x264, x265, vp9, svt-av1, vvenc) \
       -p Platform type (CPU or GPU) \
-      -sp preset type (CPU : veryslow, fast, faster | GPU : slow, medium, fast) \
-      -m psnr ssim 
+      -sp preset type (CPU : veryslow, medium, fast, faster | GPU : slow, medium, fast) \
+      -m psnr ssim vmaf
 ```    
   
   
-***Note : On the GPU platform, the max bit depth for x264 is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new)
+***Note : On the GPU platform, the max bit depth for x264 is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
 
 
 
@@ -83,25 +84,6 @@ green : Encoded video is ready
 
 ## Results
 
-### Encoding performance (Energy, CO2 emissions, Encoding time, CPU and memory usage)
-
-
-
-  Energy and CO2 emissions     |  CPU and memory usage         |  Encoding time                | 
-:-----------------------------:|:-----------------------------:|:-----------------------------:
- ![](figures/Bar_dataset.jpg)  | ![](figures/bar_cpu_memory_time.jpg)  |  ![](figures/line_dataset_time.jpg)   
-
-
- 
- ### Quality
- 
- 
- 
-   PSNR     |  SSIM         |  VMAF                | 
-:-----------------------------:|:-----------------------------:|:-----------------------------:
- ![](figures/line_dataset_PSNR.jpg)  | ![](figures/line_dataset_SSIM.jpg)  |  ![](figures/line_dataset_VMAF.jpg)  
- ![](figures/dataset_BD_rate_(PSNR)_relative_Energy.jpg)  | ![](figures/dataset_BD_rate_(SSIM)_relative_Energy.jpg)  |  ![](figures/dataset_BD_rate_(VMAF)_relative_Energy.jpg)    
-     
-  
+### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding energy co2.).
 
 
