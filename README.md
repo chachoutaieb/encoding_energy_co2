@@ -53,8 +53,10 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -b Encoding bitrate (kb/s) \
       -c codec (x264, x265, vp9, svt-av1, vvenc) \
       -p Platform type (CPU or GPU) \
-      -sp preset type (CPU : veryslow, medium, fast, faster | GPU : slow, medium, fast) \
-      -m psnr ssim vmaf
+      -sp Preset type (CPU : slower, medium, fast, faster | GPU : slow, medium, fast) \
+      -it Energy interval period (optional) \
+      -m psnr ssim vmaf 
+      
 ```    
   
   
