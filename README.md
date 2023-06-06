@@ -70,7 +70,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
 # you will see
 
 The energy value is calculated with the following interval period: x264 = 0.3s, x265 = 0.5s, vp9 = 2.0s, VVenC = 3.0s, SVT-AV1 = 0.5s.
- You can change them according to the machine's performance by using the "-it" option.
+ You can change them according to the machine\'s performance by using the "-it" option.
 
 red : Raw video does not exist 
 green : Encoded video is ready
