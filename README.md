@@ -35,9 +35,9 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -d '/your-path-to-the-project/original_dataset' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -p platform type (CPU or GPU) \
-      -sp preset type (CPU : slower, medium, fast, faster | GPU : slow, medium, fast) \
+      -sp preset type (CPU : 'slower', 'medium', 'fast', 'faster' | GPU : 'slow', 'medium', 'fast') \
       -it Energy interval period in seconds. (optional) \
-      -m psnr ssim vmaf  
+      -m 'psnr' 'ssim' 'vmaf'
       
 ```
 
@@ -52,11 +52,11 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -f framerate  of original video (fps) \
       -x bit depth  of original video (8 or 10) \
       -b Encoding bitrate (kb/s) \
-      -c codec (CPU : x264, x265, vp9, svt-av1, vvenc | GPU : 'h264_nvenc', 'hevc_nvenc') \
+      -c codec (CPU : 'x264', 'x265', 'vp9', 'svt-av1', 'vvenc' | GPU : 'h264_nvenc', 'hevc_nvenc') \
       -p Platform type (CPU or GPU) \
-      -sp Preset type (CPU : slower, medium, fast, faster | GPU : slow, medium, fast) \
+      -sp Preset type (CPU : 'slower', 'medium', 'fast', 'faster' | GPU : 'slow', 'medium', 'fast') \
       -it Energy interval period in seconds \
-      -m psnr ssim vmaf 
+      -m 'psnr' 'ssim' 'vmaf' 
       
 ```    
   
