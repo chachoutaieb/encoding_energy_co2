@@ -11,15 +11,15 @@ git clone https://github.com/chachoutaieb/encoding_energy_co2.git
 pip3 install -r requirements.txt
 
 ```
-- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/){:target="_blank"}
-- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec){:target="_blank"}
+- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
+- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
 - Install ffmpeg 5
 
 
 
 ## Download Dataset
 
-- [x] [Original dataset](https://jvet.hhi.fraunhofer.de/){:target="_blank"}
+- [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
 - [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz and Wassim.Hamidouche[at]insa-rennes.fr.
 
 Note : make all the downloaded dataset in the dataset directory
@@ -61,7 +61,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
 ```    
   
   
-***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new){:target="_blank"}.
+***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
 
 
 
@@ -69,12 +69,15 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
 
 # you will see
 
+The energy value is calculated with the following interval period: x264 = 0.3s, x265 = 0.5s, vp9 = 2.0s, VVenC = 3.0s, SVT-AV1 = 0.5s.
+ You can change them according to the machine's performance by using the "-it" option.
+
 red : Raw video does not exist 
 green : Encoded video is ready
 +------------------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
 |                       Encoded video                        | Time (s) |Bitrate(kb/s)| Energy (Wh)  |  CO2eq (g)  |  PSNR  |  SSIM  |  VMAF  |
 +------------------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
-|           ArenaOfValor_1920x1080_60_8bit_420.yuv           |                          The raw video does not exist                          |
+|           ArenaOfValor_1920x1080_60_8bit_420.yuv           |                        Error: The raw video does not exist                     |
 +------------------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
 |     BasketballDrillText_3200k_50fps_libx264_faster.mp4     |  0.647   |    3332     | 0.0005615727 | 0.000056719 | 33.86  |  0.88  | 86.41  |
 +------------------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
@@ -95,6 +98,6 @@ green : Encoded video is ready
 
 ## Results
 
-#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding_energy_co2){:target="_blank"}.
+#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding_energy_co2).
 
 
