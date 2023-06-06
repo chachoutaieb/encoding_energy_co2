@@ -11,15 +11,15 @@ git clone https://github.com/chachoutaieb/encoding_energy_co2.git
 pip3 install -r requirements.txt
 
 ```
-- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
-- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
+- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/){:target="_blank"}
+- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec){:target="_blank"}
 - Install ffmpeg 5
 
 
 
 ## Download Dataset
 
-- [x] [Original dataset](https://jvet.hhi.fraunhofer.de/)
+- [x] [Original dataset](https://jvet.hhi.fraunhofer.de/){:target="_blank"}
 - [x] The whole encoded dataset can be shared upon request. Please, send an email to taieb.chachou[at]gmail.com with Cc sfezza[at]ensttic.dz and Wassim.Hamidouche[at]insa-rennes.fr.
 
 Note : make all the downloaded dataset in the dataset directory
@@ -61,7 +61,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
 ```    
   
   
-***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
+***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new){:target="_blank"}.
 
 
 
@@ -95,6 +95,6 @@ green : Encoded video is ready
 
 ## Results
 
-#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding_energy_co2).
+#### The results of this project can be found on the following [website](https://chachoutaieb.github.io/encoding_energy_co2){:target="_blank"}.
 
 
