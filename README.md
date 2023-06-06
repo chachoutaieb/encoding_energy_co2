@@ -36,7 +36,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -r '/your-path-to-the-project/encoding_results.xlsx' \
       -p platform type (CPU or GPU) \
       -sp preset type (CPU : slower, medium, fast, faster | GPU : slow, medium, fast) \
-      -it Energy interval period in seconds. (optional) (fix five value for the five codec ex. 0.5 1 2 3 0.5)
+      -it Energy interval period in seconds. (optional) \
       -m psnr ssim vmaf  
       
 ```
@@ -55,7 +55,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -c codec (x264, x265, vp9, svt-av1, vvenc) \
       -p Platform type (CPU or GPU) \
       -sp Preset type (CPU : slower, medium, fast, faster | GPU : slow, medium, fast) \
-      -it Energy interval period in seconds. (optional) (fix one value, ex. "-it 1") \
+      -it Energy interval period in seconds \
       -m psnr ssim vmaf 
       
 ```    
