@@ -209,15 +209,10 @@ class video_encoding:
         
             
         if platform != 'GPU':
-        
-            VVenC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvenc-master/bin/release-static/vvencapp'
-            VVdeC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvdec-master/bin/vvdec-master/bin/release-static/vvdecapp'
-            
-            """
             VVenC_path = None
             VVdeC_path = None
             
-            
+            """
             Example :
                 VVenC_path = 'path to folder/vvenc-master/bin/release-static/vvencapp'
                 VVdeC_path = 'path to folder/vvdec-master/bin/release-static/vvdecapp'
