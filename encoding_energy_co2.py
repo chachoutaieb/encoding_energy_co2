@@ -209,7 +209,6 @@ class video_encoding:
 		
             VVenC_path = None
             VVdeC_path = None
-            
             """
             Example :
                 VVenC_path = 'path to folder/vvenc-master/bin/release-static/vvencapp'
