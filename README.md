@@ -9,6 +9,7 @@ For further information about the project, you can find additional details from 
 ```bash
 git clone https://github.com/chachoutaieb/encoding_energy_co2.git
 pip3 install -r requirements.txt
+sudo chmod a=r /sys/class/powercap/intel-rapl:0/energy_uj
 
 ```
 - [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
