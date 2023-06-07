@@ -394,17 +394,14 @@ class video_encoding:
                             elif c == 'libvpx-vp9':
                                 proc_name = 'ffmpeg'
                                 interval = interval_codec[2]
-                                if speed in ['slower', 'medium']:
+                                if speed in ['slower', 'medium', 'fast']:
                                     if video_or.split('.')[-1] == 'yuv':
                                         envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
                                         envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p      
-                                elif speed in ['faster' ,'fast']:
+                                elif speed in ['faster']:
                                     if video_or.split('.')[-1] == 'yuv':
-                                        if speed == 'fast':
-                                            envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
-                                        else:
-                                            envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
                                         envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
                             elif c == 'libaom-av1':
