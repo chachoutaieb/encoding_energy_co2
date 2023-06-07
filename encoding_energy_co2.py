@@ -205,10 +205,8 @@ class video_encoding:
     def encoding(self, metric, q, platform, wb0, wb1, wb2, pathV, pxl_fmtV, bitV, resV, fpsV, codec, speed, output1s, intrvalv):
        
         print("")
-        
-        
-            
         if platform != 'GPU':
+		
             VVenC_path = None
             VVdeC_path = None
             
@@ -218,8 +216,8 @@ class video_encoding:
                 VVdeC_path = 'path to folder/vvdec-master/bin/release-static/vvdecapp'
             """
             if VVenC_path == None or VVdeC_path ==  None:
-                print(fg.red +'Error: Please install VVenC and ensure that the path to "bin/release-static/vvencapp" is correctly set on line 209 (encoding_energy_co2.py).'+fg.rs)
-                print(fg.red +'Error: Please install VVdeC and ensure that the path to "bin/release-static/vvdecapp" is correctly set on line 210 (encoding_energy_co2.py).\n'+fg.rs)
+                print(fg.red +'Error: Please install VVenC and ensure that the path to "bin/release-static/vvencapp" is correctly set on line 210 (encoding_energy_co2.py).'+fg.rs)
+                print(fg.red +'Error: Please install VVdeC and ensure that the path to "bin/release-static/vvdecapp" is correctly set on line 211 (encoding_energy_co2.py).\n'+fg.rs)
                 exit()
         if pathV != None:
             sheet0 = ""
