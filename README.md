@@ -27,7 +27,7 @@ Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
 
-- To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx, in order to estimate the energy , co2 emissions, CPU or GPU usage, etc. You can use the following command:
+- To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx, in order to estimate the energy , CO2 emissions, CPU or GPU usage, etc. You can use the following command:
 
 ```bash
 
@@ -42,7 +42,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       
 ```
 
-- To encode your own video sequence and estimate the energy, co2 emissions, CPU or GPU usage, etc. You can use the following command:
+- To encode your own video sequence and estimate the energy, CO2 emissions, CPU or GPU usage, etc. You can use the following command:
 
 ```bash
 python3 '/your-path-to-the-project/encoding_energy_co2.py' \
