@@ -42,7 +42,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       
 ```
 
-- To encode your own video and estimate the energy, co2 emissions, CPU or GPU usage, etc. You can use the following command:
+- To encode your own video sequence and estimate the energy, co2 emissions, CPU or GPU usage, etc. You can use the following command:
 
 ```bash
 python3 '/your-path-to-the-project/encoding_energy_co2.py' \
