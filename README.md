@@ -1,7 +1,7 @@
-# Energy and Carbon Emissions of Modern Video Encoders
-In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of quality, energy consumption, CO2 emissions and CPU and memory usage. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
+# Energy Consumption and Carbon Emissions of Modern Software Video Encoders
+In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of energy consumption, CO2 emissions and coding efficiency. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
 
-For further information about the project, you can find additional details from [here](https://chachoutaieb.github.io/encoding_energy_co2).
+For more information on the project, you can find additional details [here](https://chachoutaieb.github.io/encoding_energy_co2).
 
 ## Install 
 
@@ -27,7 +27,7 @@ Note : make all the downloaded dataset in the dataset directory
 
 ## Usage
 
-- To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx and with estimation of the energy , co2 emissions, CPU or GPU usage, etc. we use the following command:
+- To encode JVET-CTC dataset used in our project with the target encoding parameter defined in data/bitrate-final.xlsx, in order to estimate the energy , co2 emissions, CPU or GPU usage, etc. You can use the following command:
 
 ```bash
 
@@ -42,7 +42,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       
 ```
 
-- To encode your own video with estimation of the energy, co2 emissions, CPU or GPU usage, etc. we use the following command:
+- To encode your own video and estimate the energy, co2 emissions, CPU or GPU usage, etc. You can use the following command:
 
 ```bash
 python3 '/your-path-to-the-project/encoding_energy_co2.py' \
@@ -62,16 +62,16 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
 ```    
   
   
-***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose all video with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
+***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose, all videos with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
 
 
 
 ```bash
 
-# you will see
+# you will see the following result
 
 The energy value is calculated with the following interval period: x264 = 0.3s, x265 = 0.5s, vp9 = 2.0s, VVenC = 3.0s, SVT-AV1 = 0.5s.
- You can change them according to the machine\'s performance by using the "-it" option.
+ You can change them according to the performance of machine by using the "-it" option.
 
 red : Raw video does not exist 
 green : Encoded video is ready
