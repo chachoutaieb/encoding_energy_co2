@@ -1,7 +1,6 @@
 # Energy Consumption and Carbon Emissions of Modern Software Video Encoders
-<div  style="text-align: justify">
 In this project, we provide a comparative study between five leading video coding standards, namely H.264/AVC, H.265/HEVC, H.266/VVC, VP9, and AV1 through their open-source and fast software encoders x264, x265, VVenC, libvpx-vp9, and SVT-AV1, respectively, in terms of energy consumption, CO2 emissions and coding efficiency. This study provides a better understanding of the trade-off between energy consumption, bitrate, and quality of different encoders and determines which is the most suitable for developing a green and sustainable video streaming solution.
-</div>
+
 For more information on the project, you can find additional details [here](https://chachoutaieb.github.io/encoding_energy_co2).
 
 ## Install 
