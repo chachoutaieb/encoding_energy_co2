@@ -172,6 +172,9 @@ class video_encoding:
         if platform != 'GPU':
             VVenC_path = None
             VVdeC_path = None
+            
+            #VVenC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvenc-master/bin/release-static/vvencapp'
+            #VVdeC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvdec-master/bin/release-static/vvdecapp'
             """
             Example :
                 VVenC_path = 'path to folder/vvenc-master/bin/release-static/vvencapp'
@@ -198,11 +201,11 @@ class video_encoding:
         codec_list_gpu = [] 
         if  platform == 'CPU':
             if speed == 'slower':
-                preset = ['veryslow', '0', '3', 'medium']
-                interval_codec = [0.3, 0.3, 2, 3, 0.5]
+                preset = ['veryslow', '0', '3', 'slow']
+                interval_codec = [0.3, 0.3, 2, 3, 0.3]
             elif speed == 'medium':
-                preset = ['medium', '3', '6', 'slow']
-                interval_codec = [0.06,  0.15, 0.5, 3, 0.3]
+                preset = ['medium', '3', '6', 'medium']
+                interval_codec = [0.06,  0.15, 0.5, 3, 0.5]
             elif speed == 'fast':
                 preset = ['veryfast', '6', '10', 'fast']
                 interval_codec = [0.04,  0.1, 0.5, 1, 0.2]
@@ -362,7 +365,7 @@ class video_encoding:
                         else :  
                             btr = sheet0.cell(row = ib, column = b).value
                         #print(btr)
-                        os.makedirs(os.path.join(self.project_path, 'encoded_video'), exist_ok=True)
+                        os.makedirs(os.path.join(self.project_path, 'encoded_video_'+speed), exist_ok=True)
                         os.makedirs(os.path.join(self.project_path, 'output'), exist_ok=True)
                         if c == 'VVenC' :  
                             vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'_'+speed+'.266'
@@ -374,50 +377,50 @@ class video_encoding:
                             output1 = output1s.split('.')[0]+'_'+str(btr)+'k_'+c+'_'+speed+'.'+output1s.split('.')[1]
                             vid_trans = os.path.basename(output1s).split('.')[0]+'_'+str(btr)+'k_'+c+'_'+speed+'.'+os.path.basename(output1s).split('.')[1]
                         else:
-                            output1 = os.path.join(self.project_path, 'encoded_video', vid_trans)
+                            output1 = os.path.join(self.project_path, 'encoded_video_'+speed, vid_trans)
                         idv = self.find_index_row(sheet2, vid_trans)
                         otp = os.path.exists(output1)
                         flt = ''
                         encVVCtxt = os.path.join(self.project_path, 'output', 'encVVC.txt')
                         if idv == None :
                             time_p = os.path.join(self.project_path, 'output', 'time.txt')
-                            if c == 'libx264' or c == 'libx265':
-                                if c =='libx264':
-                                    interval = interval_codec[0]
-                                elif c =='libx265':
-                                    interval = interval_codec[1]
+                            
+                            if c =='libx265':
+                                interval = interval_codec[1]
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x265-params "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+'" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
                                 else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x265-params "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+'" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                #print(envid)
+                            elif c =='libx264':
+                                interval = interval_codec[0]
+                                proc_name = 'ffmpeg'
+                                if video_or.split('.')[-1] == 'yuv':
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x264opts "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+':no-scenecut" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                                else :
+                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x264opts "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+':no-scenecut" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                             elif c == 'libvpx-vp9':
                                 proc_name = 'ffmpeg'
                                 interval = interval_codec[2]
                                 if speed in ['slower', 'medium', 'fast']:
                                     if video_or.split('.')[-1] == 'yuv':
-                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
-                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p      
+                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p      
                                 elif speed in ['faster']:
                                     if video_or.split('.')[-1] == 'yuv':
-                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k  -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
-                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
-                            elif c == 'libaom-av1':
-                                interval = interval_codec[3]
-                                proc_name = 'ffmpeg'
-                                if video_or.split('.')[-1] == 'yuv':
-                                   envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
-                                else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -cpu-used  '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -strict -2 '+str(encod_path)+' 2>&1 | grep "bench: utime" > '+time_p 
+                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k  -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                            
                             elif c == 'libsvtav1':
                                 interval = interval_codec[4]
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                 else :
-                                   envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                   envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                             elif c == 'VVenC' : 
                                 interval = interval_codec[3]
                                 proc_name = 'vvencapp'
@@ -428,10 +431,11 @@ class video_encoding:
                                     pxl_fmt1 = 'yuv420'
                                     bitd = 8                                
                                 vid_trans_yuv = 'quality.yuv'
-                                output1 = os.path.join(self.project_path, 'encoded_video', vid_trans)
-                                output1_yuv = os.path.join(self.project_path, 'encoded_video', vid_trans_yuv)                               
-                                envid = VVenC_path+' --preset '+preset[3]+' -i '+str(input1)+' -c '+str(pxl_fmt1)+' -s '+str(res)+' --internal-bitdepth '+str(bitd)+' -r '+str(fps)+' -b '+str(btr)+'k -t 16 -o '+str(output1)+'  2>&1 > '+encVVCtxt 
-                                devid = VVdeC_path+' -b '+str(output1)+' -o '+str(output1_yuv)                    
+                                output1 = os.path.join(self.project_path, 'encoded_video_'+speed, vid_trans)
+                                output1_yuv = os.path.join(self.project_path, vid_trans_yuv)                               
+                                envid = VVenC_path+' --preset '+preset[3]+' -i '+str(input1)+' -c '+str(pxl_fmt1)+' -s '+str(res)+' --internal-bitdepth '+str(bitd)+' -r '+str(fps)+' -b '+str(btr)+'k -t 16 --refreshsec 2 -o '+str(output1)+'  2>&1 > '+encVVCtxt 
+                                devid = VVdeC_path+' -b '+str(output1)+' -o '+str(output1_yuv) 
+                                #print(envid)                
                             elif c == 'hevc_nvenc' :
                                 interval = interval_codec[1]
                                 if video_or.split('.')[-1] == 'yuv':
