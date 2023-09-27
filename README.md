@@ -40,26 +40,7 @@ python3 '/your-path-to-the-project/encoding_energy_co2.py' \
       -it Energy interval period in seconds. (optional) \
       -m 'psnr' 'ssim' 'vmaf'
       
-```
-
-- To encode your own video sequence and estimate the energy, CO2 emissions, CPU or GPU usage, etc. You can use the following command:
-
-```bash
-python3 '/your-path-to-the-project/encoding_energy_co2.py' \
-      -i '/your-path-to-the-project/inputVideo.yuv (.yuv, .y4m, .mp4, etc.)' \
-      -o '/your-path-to-the-project/outputVideo.mp4 (.mp4, .266, .265, etc.)' \
-      -r '/your-path-to-the-project/encoding_results.xlsx' \
-      -s resolution of original video ('WxH') \
-      -f framerate  of original video (fps) \
-      -x bit depth  of original video (8 or 10) \
-      -b Encoding bitrate (kb/s) \
-      -c codec (CPU : 'x264', 'x265', 'vp9', 'svt-av1', 'vvenc' | GPU : 'h264_nvenc', 'hevc_nvenc') \
-      -p Platform type (CPU or GPU) \
-      -sp Preset type (CPU : 'slower', 'medium', 'fast', 'faster' | GPU : 'slow', 'medium', 'fast') \
-      -it Energy interval period in seconds \
-      -m 'psnr' 'ssim' 'vmaf' 
-      
-```    
+``` 
   
   
 ***Note : On the GPU platform, the max bit depth for h264_nvenc is 8-bit. For this purpose, all videos with 10-bit are encoded automatically with a pixel format of 8-bit for this codec. You can find more information about that [here](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
