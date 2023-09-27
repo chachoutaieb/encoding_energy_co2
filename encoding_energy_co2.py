@@ -180,19 +180,17 @@ class video_encoding:
         print("")
         if platform != 'GPU':
             
-            VVenC_path = '/mnt/DONNEES2/CTC/vvenc'
-            VVdeC_path = '/mnt/DONNEES2/CTC/vvdec'
+            VVenC_path = None
+            VVdeC_path = None
             
-            VVenC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvenc-master'
-            VVdeC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvdec-master'
             """
             Example :
                 VVenC_path = 'path to folder/vvenc-master'
                 VVdeC_path = 'path to folder/vvdec-master'
             """
             if VVenC_path == None or VVdeC_path ==  None:
-                print(fg.red +'Error: Please install VVenC and ensure that the path to "vvenc-master" is correctly set on line 173 (encoding_energy_co2.py).'+fg.rs)
-                print(fg.red +'Error: Please install VVdeC and ensure that the path to "vvdec-master" is correctly set on line 174 (encoding_energy_co2.py).\n'+fg.rs)
+                print(fg.red +'Error: Please install VVenC and ensure that the path to "vvenc-master" is correctly set on line 183 (encoding_energy_co2.py).'+fg.rs)
+                print(fg.red +'Error: Please install VVdeC and ensure that the path to "vvdec-master" is correctly set on line 184 (encoding_energy_co2.py).\n'+fg.rs)
                 exit()
         if pathV != None:
             sheet0 = ""
