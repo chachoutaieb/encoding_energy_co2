@@ -14,7 +14,7 @@ sudo chmod a=r /sys/class/powercap/intel-rapl:0/energy_uj
 ```
 - [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
 - [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
-- Install ffmpeg >= 5.1
+- Install ffmpeg >= 5.2
 
 
 
