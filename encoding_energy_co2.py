@@ -36,6 +36,15 @@ class video_encoding:
             if title_row == cell_name:
                 return i  
     
+    def encoding_config(self, video_name, l1, param):
+        
+        
+        f = open(video_name, "w")
+        f.write("#======== File I/O ===============\n")
+        for i, p in enumerate(l1):
+            f.write(p+" : "+param[i]+"\n")
+        f.close()
+        
     # decorater used to block function printing to the console
     def blockPrinting(self, func):
         def func_wrapper(*args, **kwargs):
@@ -170,19 +179,20 @@ class video_encoding:
     def encoding(self, metric, q, platform, wb0, wb1, wb2, pathV, pxl_fmtV, bitV, resV, fpsV, codec, speed, output1s, intrvalv):
         print("")
         if platform != 'GPU':
-            VVenC_path = None
-            VVdeC_path = None
             
-            #VVenC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvenc-master/bin/release-static/vvencapp'
-            #VVdeC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvdec-master/bin/release-static/vvdecapp'
+            VVenC_path = '/mnt/DONNEES2/CTC/vvenc'
+            VVdeC_path = '/mnt/DONNEES2/CTC/vvdec'
+            
+            VVenC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvenc-master'
+            VVdeC_path = '/media/ridha/D81821F01821CE76/Doctorat/Projet4_Energy/CTC/codeP4/vvdec-master'
             """
             Example :
-                VVenC_path = 'path to folder/vvenc-master/bin/release-static/vvencapp'
-                VVdeC_path = 'path to folder/vvdec-master/bin/release-static/vvdecapp'
+                VVenC_path = 'path to folder/vvenc-master'
+                VVdeC_path = 'path to folder/vvdec-master'
             """
             if VVenC_path == None or VVdeC_path ==  None:
-                print(fg.red +'Error: Please install VVenC and ensure that the path to "bin/release-static/vvencapp" is correctly set on line 173 (encoding_energy_co2.py).'+fg.rs)
-                print(fg.red +'Error: Please install VVdeC and ensure that the path to "bin/release-static/vvdecapp" is correctly set on line 174 (encoding_energy_co2.py).\n'+fg.rs)
+                print(fg.red +'Error: Please install VVenC and ensure that the path to "vvenc-master" is correctly set on line 173 (encoding_energy_co2.py).'+fg.rs)
+                print(fg.red +'Error: Please install VVdeC and ensure that the path to "vvdec-master" is correctly set on line 174 (encoding_energy_co2.py).\n'+fg.rs)
                 exit()
         if pathV != None:
             sheet0 = ""
@@ -198,18 +208,28 @@ class video_encoding:
         codec_cpu = ['libx264' ,'libx265', 'libvpx-vp9', 'VVenC', 'libsvtav1'] 
         codec_gpu = ['h264_nvenc', 'hevc_nvenc']
         codec_list_cpu = []
-        codec_list_gpu = [] 
+        codec_list_gpu = []
+        gopsize = [32, 32, 32, 64, 64, 96]
+        fpslist = [20, 24, 30, 50, 60, 100]
         if  platform == 'CPU':
             if speed == 'slower':
+                confpath = VVenC_path+'/cfg/randomaccess_slow.cfg'
+                confpath64 = self.project_path+'/output/randomaccess_slow64.cfg'
                 preset = ['veryslow', '0', '3', 'slow']
                 interval_codec = [0.3, 0.3, 2, 3, 0.3]
             elif speed == 'medium':
+                confpath = VVenC_path+'/cfg/randomaccess_medium.cfg'
+                confpath64 = self.project_path+'/output/randomaccess_medium64.cfg'
                 preset = ['medium', '3', '6', 'medium']
                 interval_codec = [0.06,  0.15, 0.5, 3, 0.5]
             elif speed == 'fast':
+                confpath = VVenC_path+'/cfg/randomaccess_fast.cfg'
+                confpath64 =  self.project_path+'/output/randomaccess_fast64.cfg'
                 preset = ['veryfast', '6', '10', 'fast']
                 interval_codec = [0.04,  0.1, 0.5, 1, 0.2]
             elif speed == 'faster':
+                confpath = VVenC_path+'/cfg/randomaccess_faster.cfg'
+                confpath64 =  self.project_path+'/output/randomaccess_faster64.cfg'
                 preset = ['ultrafast', '8', '12', 'faster']
                 interval_codec = [0.04,  0.1, 0.2, 1, 0.2]
             if intrvalv != None:
@@ -319,7 +339,11 @@ class video_encoding:
         print("".join(line1))
         print(header1)
         print("".join(line1))
-        for i in range(q[0], q[1]):
+        qplist1 = [22, 27, 32, 37]
+        qplist2 = [33, 42, 51, 59]
+        #lq = 
+        #q = list(range(3,11))+list(range(14,16))+list(range(20,22))
+        for i in range(2, 28):
             if pathV != None:
                 video_or = pathV
                 video_name = os.path.basename(os.path.normpath(pathV)).split('.')[0]
@@ -327,6 +351,7 @@ class video_encoding:
                 res = resV
                 fps = fpsV
                 pxl_fmt = pxl_fmtV
+                nbr_frame = -1
             else:
                 video_or = sheet1.cell(row = i, column = 1).value
                 video_name = sheet1.cell(row = i, column = 2).value
@@ -334,6 +359,7 @@ class video_encoding:
                 res = sheet1.cell(row = i, column = 4).value
                 fps = sheet1.cell(row = i, column = 5).value
                 pxl_fmt = sheet1.cell(row = i, column = 6).value
+                nbr_frame = sheet1.cell(row = i, column = 7).value
             if platform == 'GPU':
                 codec_list = codec_list_gpu
                 psnr_col = 12
@@ -357,7 +383,13 @@ class video_encoding:
             #print(input1)
             if os.path.exists(input1) == True:
                 for ico, c in enumerate(codec_list):
-                    for b in range(bitrateIndex[0], bitrateIndex[1]):
+                    if c in ['libx264' ,'libx265', 'VVenC']:
+                        qplist = qplist1
+                    else:
+                        qplist = qplist2
+                    
+                    for iqp, qp in enumerate(qplist):
+                        """
                         ib = pasCodec + bitratei
                         #print(ib, b)
                         if pathV != None:
@@ -365,65 +397,67 @@ class video_encoding:
                         else :  
                             btr = sheet0.cell(row = ib, column = b).value
                         #print(btr)
-                        os.makedirs(os.path.join(self.project_path, 'encoded_video_'+speed), exist_ok=True)
+                        """
+                        os.makedirs(os.path.join(self.project_path, 'encoded_video_'+speed+'2'), exist_ok=True)
                         os.makedirs(os.path.join(self.project_path, 'output'), exist_ok=True)
                         if c == 'VVenC' :  
-                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'_'+speed+'.266'
-                        elif ico == 0 and b == bitrateIndex[0]:
-                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'1_'+speed+'.mp4'
+                            vid_trans = video_name+'_QP'+str(qp)+'_'+str(fps)+'fps_'+c+'_'+speed+'.266'
+                        elif ico == 0 and iqp == 0:
+                            vid_trans = video_name+'_QP'+str(qp)+'_'+str(fps)+'fps_'+c+'1_'+speed+'.mp4'
                         else:
-                            vid_trans = video_name+'_'+str(btr)+'k_'+str(fps)+'fps_'+c+'_'+speed+'.mp4'
+                            vid_trans = video_name+'_QP'+str(qp)+'_'+str(fps)+'fps_'+c+'_'+speed+'.mp4'
                         if pathV != None:
-                            output1 = output1s.split('.')[0]+'_'+str(btr)+'k_'+c+'_'+speed+'.'+output1s.split('.')[1]
-                            vid_trans = os.path.basename(output1s).split('.')[0]+'_'+str(btr)+'k_'+c+'_'+speed+'.'+os.path.basename(output1s).split('.')[1]
+                            output1 = output1s.split('.')[0]+'_QP'+str(qp)+'_'+c+'_'+speed+'.'+output1s.split('.')[1]
+                            vid_trans = os.path.basename(output1s).split('.')[0]+'_QP'+str(qp)+'_'+c+'_'+speed+'.'+os.path.basename(output1s).split('.')[1]
                         else:
-                            output1 = os.path.join(self.project_path, 'encoded_video_'+speed, vid_trans)
+                            output1 = os.path.join(self.project_path, 'encoded_video_'+speed+'2', vid_trans)
                         idv = self.find_index_row(sheet2, vid_trans)
                         otp = os.path.exists(output1)
                         flt = ''
-                        encVVCtxt = os.path.join(self.project_path, 'output', 'encVVC.txt')
+                        encVVCtxt = os.path.join(self.project_path, 'output', vid_trans+'.txt')
                         if idv == None :
                             time_p = os.path.join(self.project_path, 'output', 'time.txt')
-                            
+                            idfps = fpslist.index(fps)
+                            gs = 32
                             if c =='libx265':
                                 interval = interval_codec[1]
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x265-params "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+'" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                                    envid =  'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -frames:v '+str(nbr_frame)+' -x265-params "keyint='+str(gs)+':min-keyint='+str(gs)+'" -crf '+str(qp)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
                                 else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x265-params "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+'" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid =  'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -frames:v '+str(nbr_frame)+' -x265-params "keyint='+str(gs)+':min-keyint='+str(gs)+'" -qp '+str(qp)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                 #print(envid)
                             elif c =='libx264':
                                 interval = interval_codec[0]
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x264opts "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+':no-scenecut" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                                    envid =  'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -frames:v '+str(nbr_frame)+' -x264-params  "keyint='+str(gs)+':min-keyint='+str(gs)+'" -crf '+str(qp)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
                                 else :
-                                    envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -x264opts "keyint='+str(int(2*float(fps)))+':min-keyint='+str(int(2*float(fps)))+':no-scenecut" '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid =  'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[0]+' -frames:v '+str(nbr_frame)+' -x264-params  "keyint='+str(gs)+':min-keyint='+str(gs)+'" -qp '+str(qp)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                             elif c == 'libvpx-vp9':
                                 proc_name = 'ffmpeg'
                                 interval = interval_codec[2]
                                 if speed in ['slower', 'medium', 'fast']:
                                     if video_or.split('.')[-1] == 'yuv':
-                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        envid =  'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -frames:v '+str(nbr_frame)+' -b:v 0 -crf '+str(qp)+' -g '+str(gs)+' -keyint_min '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
-                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p      
+                                        envid =  'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -speed '+preset[1]+' -frames:v '+str(nbr_frame)+' -b:v 0 -crf '+str(qp)+' -g '+str(gs)+' -keyint_min '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p      
                                 elif speed in ['faster']:
                                     if video_or.split('.')[-1] == 'yuv':
-                                        envid = 'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k  -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                        envid =  'ffmpeg  -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -frames:v '+str(nbr_frame)+' -b:v 0 -crf '+str(qp)+' -g '+str(gs)+' -keyint_min '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                     else :
-                                        envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k  -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
+                                        envid =  'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -quality realtime -speed '+preset[1]+' -frames:v '+str(nbr_frame)+' -b:v 0 -crf '+str(qp)+' -g '+str(gs)+' -keyint_min '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p    
                             
                             elif c == 'libsvtav1':
                                 interval = interval_codec[4]
                                 proc_name = 'ffmpeg'
                                 if video_or.split('.')[-1] == 'yuv':
-                                    envid = 'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid =  'ffmpeg -y -benchmark -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -frames:v '+str(nbr_frame)+' -crf '+str(qp)+' -g '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                                 else :
-                                   envid = 'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -b:v '+str(btr)+'k -g '+str(int(2*float(fps)))+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
+                                    envid =  'ffmpeg -y -benchmark -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str(pxl_fmt)+' -preset '+preset[2]+' -frames:v '+str(nbr_frame)+' -crf '+str(qp)+' -g '+str(gs)+' '+str(output1)+' 2>&1 | grep "bench: utime" > '+time_p
                             elif c == 'VVenC' : 
                                 interval = interval_codec[3]
-                                proc_name = 'vvencapp'
+                                proc_name = 'vvencFFapp'
                                 if pxl_fmt == 'yuv420p10le' :
                                     pxl_fmt1 = 'yuv420_10'
                                     bitd = 10
@@ -431,11 +465,21 @@ class video_encoding:
                                     pxl_fmt1 = 'yuv420'
                                     bitd = 8                                
                                 vid_trans_yuv = 'quality.yuv'
-                                output1 = os.path.join(self.project_path, 'encoded_video_'+speed, vid_trans)
-                                output1_yuv = os.path.join(self.project_path, vid_trans_yuv)                               
-                                envid = VVenC_path+' --preset '+preset[3]+' -i '+str(input1)+' -c '+str(pxl_fmt1)+' -s '+str(res)+' --internal-bitdepth '+str(bitd)+' -r '+str(fps)+' -b '+str(btr)+'k -t 16 --refreshsec 2 -o '+str(output1)+'  2>&1 > '+encVVCtxt 
-                                devid = VVdeC_path+' -b '+str(output1)+' -o '+str(output1_yuv) 
-                                #print(envid)                
+                                output1 = os.path.join(self.project_path, 'encoded_video_'+speed+'2', vid_trans)
+                                output1_yuv = os.path.join(self.project_path, vid_trans_yuv) 
+                                w, h = res.split('x')
+                                l1 = ['InputFile', 'InputBitDepth', 'InputChromaFormat', 'FrameRate', 'FrameScale', 'FrameSkip', 'SourceWidth', 'SourceHeight', 'QP', 'Threads', 'FramesToBeEncoded',  'BitstreamFile']
+                                param = [input1, str(bitd), '420',  str(fps), '1', '0', w, h, str(qp), '16', str(nbr_frame), output1]
+                                squenceconfig = os.path.join(self.project_path, 'output', 'sequence.cfg')
+                                self.encoding_config(squenceconfig, l1, param)
+                                if fps >= 50:
+                                    envid = VVenC_path+'/bin/release-static/vvencFFapp'+' -c '+confpath64+' -c '+squenceconfig+' 2>&1 > '+encVVCtxt 
+                                else:
+                                    envid = VVenC_path+'/bin/release-static/vvencFFapp'+' -c '+confpath+' -c '+squenceconfig+' 2>&1 > '+encVVCtxt 
+                                 
+                                devid = VVdeC_path+'/bin/release-static/vvdecapp'+' -b '+str(output1)+' -o '+str(output1_yuv) 
+                                #print(envid) 
+                            """               
                             elif c == 'hevc_nvenc' :
                                 interval = interval_codec[1]
                                 if video_or.split('.')[-1] == 'yuv':
@@ -449,6 +493,8 @@ class video_encoding:
                                 else:
                                     envid = 'ffmpeg -y -benchmark -hwaccel auto  -i '+str(input1)+' -c:v '+c+' -pix_fmt '+str('yuv420p')+' -preset '+preset[0]+' -minrate '+str(btr)+'k -maxrate '+str(btr)+'k -b:v '+str(btr)+'k '+output1+' 2>&1 | grep "bench: utime" > '+time_p
                                 #flt = '[1:v]format=pix_fmts=yuv420p[ref]; [ref]'
+                            """
+                            
                             self.stop_threads = False
                             if os.path.exists('emissions.csv')== True:
                                 os.remove('emissions.csv')
@@ -464,7 +510,7 @@ class video_encoding:
                                 thread2.start()
                                 thread3.start()
                             t = time.time()
-                            #print(envid)
+                            
                             os.system("python3 "+os.path.join(self.project_path, 'energy.py')+" -s "+str(interval)+" -c 'FRA' -v '"+envid+"' > /dev/null 2>&1")
                             tf = time.time()-t
                             self.stop_threads = True
@@ -497,25 +543,30 @@ class video_encoding:
                             co2 = (float(energy1)*101)# kg to g
                             duration = sheet5.cell(row = 2, column = 4).value
                             btrtxt = os.path.join(self.project_path, 'output', 'btr.txt')
+                            btrtxt2 = os.path.join(self.project_path, 'output', 'btr2.txt')
                             if c == 'VVenC':
-                                vbit = 14
+                                vbit = 15
                                 btr = ''
                                 while btr == '':
-                                    bitrate = 'grep -i " a " '+encVVCtxt+' | cut -d " " -f'+str(vbit)+' > '+btrtxt
+                                    bitrate = 'grep -i " a " '+encVVCtxt+' | cut -d "." -f1 > '+btrtxt
+                                    
                                     os.system(bitrate)
-                                    a = open(btrtxt,"r")
+                                    os.system('grep -i "a" '+btrtxt+' | cut -d "a" -f2 > '+btrtxt2)
+                                    a = open(btrtxt2,"r")
                                     btr = str(a.readlines()[0].rstrip())
                                     vbit = vbit+1
                                 a.close()
                                 t1 = '1=0'
                                 t2 = '1=0'
-                                timevvc = 'grep -i "Total Time" '+encVVCtxt+' | cut -d " " -f3 > '+time_p
+                                timevvc = 'grep -i "Total Time" '+encVVCtxt+' | cut -d "]" -f3 > '+time_p
                                 os.system(timevvc)
                                 a = open(time_p, "r")
-                                t3 = '1='+str(a.readlines()[0].rstrip()).replace("s", "")
+                                tk = str(a.readlines()[0].rstrip()).replace("[elapsed", "")
+                                tk = tk.replace("sec.", "")
+                                t3 = '1='+tk
                                 a.close()
                             else:
-                                bitrate = 'ffmpeg -i '+output1+' 2>&1 | grep "Duration" | cut -d " " -f8 > '+btrtxt
+                                bitrate =  'ffmpeg -i '+output1+' 2>&1 | grep "Duration" | cut -d " " -f8 > '+btrtxt
                                 os.system(bitrate)
                                 # PSNR 
                                 a = open(btrtxt, "r")
@@ -533,6 +584,7 @@ class video_encoding:
                             if  platform == 'CPU':
                                 #print(self.info_sys_all)
                                 info_cpu = np.array(self.info_sys_all, dtype="object")
+                                
                                 try:
                                     min_info_cpu = self.average_column_matrix(info_cpu)
                                 except:
@@ -595,62 +647,117 @@ class video_encoding:
                         vpsnr = 0
                         vssim = 0
                         f2txt = os.path.join(self.project_path, 'output', 'f2.txt')
-                        if 'psnr' in metric:
-                            vpsnr = sheet2.cell(row = idv, column = psnr_col).value
-                            if vpsnr == None:
-                                if video_or.split('.')[-1] == 'yuv':
-                                    if c == 'VVenC' : 
-                                        command1 = 'ffmpeg -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -filter_complex "'+flt+'psnr" -f null /dev/null 2>&1 | grep "PSNR y" | cut -d " " -f8 > '+f2txt
+                        
+                        tgd = '/content/ffmpeg-6.0-amd64-static/'
+                        
+                        
+                        try:
+                            if 'psnr' in metric:
+                                vpsnr = sheet2.cell(row = idv, column = psnr_col+3).value
+                                if vpsnr == None or vpsnr == 0:
+                                    if video_or.split('.')[-1] == 'yuv':
+                                        command1 =  'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -filter_complex "'+flt+'psnr" -f null /dev/null 2>&1 | grep "PSNR y"  > '+f2txt
+                                    else :
+                                        command1 =  'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -filter_complex "'+flt+'psnr" -f null /dev/null  2>&1 | grep "PSNR y" > '+f2txt
+                                    #print(command1)
+                                    if c == 'VVenC':
+                                        output266 =  os.path.join(self.project_path, 'output', vid_trans+'.txt')
+                                        os.system('grep  -i " a " '+output266+' > psnrtxt.txt')
+                                        a = open('psnrtxt.txt', "r")
+                                        linep= a.readlines()[0].rstrip()
+                                        with open('psnrtxt.txt', 'w') as f:
+                                            f.write(" ".join(linep.split()))
+                                        os.system('grep  -i " a " psnrtxt.txt | cut -d " " -f6  > psnrYtxt.txt')
+                                        os.system('grep  -i " a " psnrtxt.txt | cut -d " " -f7  > psnrUtxt.txt')
+                                        os.system('grep  -i " a " psnrtxt.txt | cut -d " " -f8  > psnrVtxt.txt')
+                                        #print('grep  -i " a " psnrtxt.txt | cut -d " " -f18  > psnrYtxt.txt')
                                     else:
-                                        command1 = 'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -filter_complex "'+flt+'psnr" -f null /dev/null 2>&1 | grep "PSNR y" | cut -d " " -f8 > '+f2txt
-                                else :
-                                    command1 = 'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -filter_complex "'+flt+'psnr" -f null /dev/null  2>&1 | grep "PSNR y" | cut -d " " -f8 > '+f2txt
-                                psnrtxt = os.path.join(self.project_path, 'output', 'psnr.txt')
-                                os.system(command1)
-                                psnr = 'grep -i ":" '+f2txt+' | cut -d ":" -f2 > '+psnrtxt
-                                os.system(psnr)
-                                a = open(psnrtxt, "r")
-                                vpsnr = float(a.readlines()[0].rstrip())
-                                sheet2.cell(row = idv, column = psnr_col).value = float(vpsnr)                            
-                        if 'ssim' in metric:
-                            vssim = sheet2.cell(row = idv, column = psnr_col+1).value
-                            if vssim == None:
-                                if video_or.split('.')[-1] == 'yuv':
-                                    if c == 'VVenC' : 
-                                        command1 = 'ffmpeg -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -filter_complex "'+flt+'ssim" -f null /dev/null 2>&1 | grep "SSIM Y" | cut -d " " -f11 > '+f2txt
-                                    else:
-                                        command1 = 'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -filter_complex "'+flt+'ssim" -f null /dev/null 2>&1 | grep "SSIM Y" | cut -d " " -f11 > '+f2txt
-                                else :
-                                    command1 = 'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -filter_complex "'+flt+'ssim" -f null /dev/null  2>&1 | grep "SSIM Y" | cut -d " " -f11 > '+f2txt
-                                os.system(command1)
-                                ssimtxt = os.path.join(self.project_path, 'output', 'ssim.txt')
-                                ssim = 'grep -i ":" '+f2txt+' | cut -d ":" -f2 > '+ssimtxt
-                                os.system(ssim)
-                                a = open(ssimtxt, "r")
-                                vssim = float(a.readlines()[0].rstrip())
-                                sheet2.cell(row = idv, column = psnr_col+1).value = float(vssim)                            
-                        if 'vmaf' in metric:
-                            vvmaf = sheet2.cell(row = idv, column = psnr_col+2).value
-                            if  vvmaf == None:
-                                if bitratei == 1:
-                                    model = 'ffmpeg/model/vmaf_4k_v0.6.1.json'
-                                else : 
-                                    model ='ffmpeg/model/vmaf_v0.6.1.json'
-                                vmaftxt = os.path.join(self.project_path, 'output', 'vmaf.txt')
-                                if video_or.split('.')[-1] == 'yuv':
-                                    if c == 'VVenC' : 
-                                        command1 = 'ffmpeg -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -lavfi "'+flt+'libvmaf" -f null /dev/null 2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt
-                                    else:
-                                        command1 = 'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -lavfi "'+flt+'libvmaf" -f null /dev/null 2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt
-                                else :
-                                    command1 = 'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -lavfi "'+flt+'libvmaf" -f null /dev/null  2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt                             
-                                os.system(command1)
-                                a = open(vmaftxt, "r")
-                                vvmaf = float(a.readlines()[0].rstrip())
-                                sheet2.cell(row = idv, column = psnr_col+2).value = float(vvmaf)                         
+                                        os.system(command1)
+                                        os.system('grep  -i "PSNR y" '+f2txt+' | cut -d " " -f5 | cut -d ":" -f2 > psnrYtxt.txt')
+                                        os.system('grep  -i "PSNR y" '+f2txt+' | cut -d " " -f6 | cut -d ":" -f2 > psnrUtxt.txt')
+                                        os.system('grep  -i "PSNR y" '+f2txt+' | cut -d " " -f7 | cut -d ":" -f2 > psnrVtxt.txt')
+                                        
+                                    a = open('psnrYtxt.txt', "r")
+                                    psnrY= float(a.readlines()[0].rstrip())
+                                    a = open('psnrUtxt.txt', "r")
+                                    psnrU= float(a.readlines()[0].rstrip())
+                                    a = open('psnrVtxt.txt', "r")
+                                    psnrV= float(a.readlines()[0].rstrip())
+                                    sheet2.cell(row = idv, column = psnr_col).value = float(psnrY)  
+                                    sheet2.cell(row = idv, column = psnr_col+1).value = float(psnrU) 
+                                    sheet2.cell(row = idv, column = psnr_col+2).value = float(psnrV) 
+                                    vpsnr = (float(psnrY)*6+float(psnrU)+float(psnrV))/8
+                                    sheet2.cell(row = idv, column = psnr_col+3).value = vpsnr
+                            
+                            if 'ssim' in metric:
+                                vssim = sheet2.cell(row = idv, column = psnr_col+7).value
+                                if vssim == None or vssim == 0:
+                                    if video_or.split('.')[-1] == 'yuv':
+                                        if c == 'VVenC' : 
+                                            #print(devid)
+                                            os.system(devid+" > /dev/null 2>&1")
+                                            if pxl_fmt == 'yuv420p':
+                                                command1 =  'ffmpeg -f rawvideo -pix_fmt yuv420p10le -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -filter_complex "'+flt+'ssim" -f null /dev/null 2>&1 | grep "SSIM Y"  > '+f2txt
+                                            else:
+                                                command1 =  'ffmpeg -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -filter_complex "'+flt+'ssim" -f null /dev/null 2>&1 | grep "SSIM Y"  > '+f2txt
+                                            
+                                        else:
+                                            command1 =  'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -filter_complex "'+flt+'ssim" -f null /dev/null 2>&1 | grep "SSIM Y"  > '+f2txt
+                                    else :
+                                        command1 =  'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -filter_complex "'+flt+'ssim" -f null /dev/null  2>&1 | grep "SSIM Y"  > '+f2txt
+                                    #print(command1)
+                                    os.system(command1)
+                                    
+                                    os.system('grep  -i "SSIM Y" '+f2txt+' | cut -d " " -f5 | cut -d ":" -f2 > ssimYtxt.txt')
+                                    os.system('grep  -i "SSIM Y" '+f2txt+' | cut -d " " -f7 | cut -d ":" -f2 > ssimUtxt.txt')
+                                    os.system('grep  -i "SSIM Y" '+f2txt+' | cut -d " " -f9 | cut -d ":" -f2 > ssimVtxt.txt')
+                                    
+                                    a = open('ssimYtxt.txt', "r")
+                                    ssimY= float(a.readlines()[0].rstrip())
+                                    a = open('ssimUtxt.txt', "r")
+                                    ssimU= float(a.readlines()[0].rstrip())
+                                    a = open('ssimVtxt.txt', "r")
+                                    ssimV= float(a.readlines()[0].rstrip())
+                                    sheet2.cell(row = idv, column = psnr_col+4).value = float(ssimY)  
+                                    sheet2.cell(row = idv, column = psnr_col+5).value = float(ssimU) 
+                                    sheet2.cell(row = idv, column = psnr_col+6).value = float(ssimV) 
+                                    vssim = (float(ssimY)*6+float(ssimU)+float(ssimV))/8
+                                    sheet2.cell(row = idv, column = psnr_col+7).value = vssim 
+
+                            if 'vmaf' in metric:
+                                vvmaf = sheet2.cell(row = idv, column = psnr_col+8).value
+                                if  vvmaf == None or  vvmaf == 0:
+                                    if bitratei == 1:
+                                        model = 'ffmpeg/model/vmaf_4k_v0.6.1.json'
+                                    else : 
+                                        model ='ffmpeg/model/vmaf_v0.6.1.json'
+                                    vmaftxt = os.path.join('vmaf.txt')
+                                    if video_or.split('.')[-1] == 'yuv':
+                                        if c == 'VVenC' : 
+                                            #print(devid)
+                                            os.system(devid+" > /dev/null 2>&1")
+                                            if pxl_fmt == 'yuv420p':
+                                                command1 =  'ffmpeg -f rawvideo -pix_fmt yuv420p10le -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -lavfi "'+flt+'libvmaf" -f null /dev/null 2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt
+                                            else:
+                                                command1 =  'ffmpeg -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(output1_yuv)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -lavfi "'+flt+'libvmaf" -f null /dev/null 2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt
+                                            
+                                        else:
+                                            command1 =  'ffmpeg -i '+str(output1)+' -f rawvideo -pix_fmt '+str(pxl_fmt)+' -s:v '+str(res)+' -r '+str(fps)+' -i '+str(input1)+' -frames:v '+str(nbr_frame)+' -lavfi "'+flt+'libvmaf" -f null /dev/null 2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt
+                                    else :
+                                        command1 =  'ffmpeg -i '+str(output1)+' -i '+str(input1)+' -lavfi "'+flt+'libvmaf" -f null /dev/null  2>&1 | grep "VMAF score:" | cut -d ":" -f2 > '+vmaftxt                             
+                                    #print(command1)
+                                    os.system(command1)
+                                    a = open(vmaftxt, "r")
+                                    vvmaf = float(a.readlines()[0].rstrip())
+                                    sheet2.cell(row = idv, column = psnr_col+8).value = float(vvmaf) 
+                        except:
+                            print(c) 
+                            vpsnr = 0.0
+                            vssim = 0.0
+                            vvmaf = 0.0                   
                         core = "|{:^60}|{:^10.4}| {:^11} | {:^10.10f} |{:^13.9f}|{:^8.2f}|{:^8.2f}|{:^8.2f}|"
                         if pathV == None:
-                            if (ico == 1 and b != bitrateIndex[0]) or (ico == 0 and b == bitrateIndex[0]):
+                            if (ico == 1 and iqp != 0) or (ico == 0 and iqp == 0):
                                 ser="ser"
                             else:
                                 print(core.format(vname, float(tim), bit, float(enrg), float(co), float(vpsnr), float(vssim) ,float(vvmaf)))
@@ -747,13 +854,19 @@ elif  args['platform'] == 'GPU':
 if args['metric'] == None:
     args['metric'] = []
 if 'psnr' in args['metric']:
-    sheet2.cell(row = 1, column = psnr_col).value = 'PSNR'
+    sheet2.cell(row = 1, column = psnr_col).value = 'PSNR Y'
+    sheet2.cell(row = 1, column = psnr_col+1).value = 'PSNR U'
+    sheet2.cell(row = 1, column = psnr_col+2).value = 'PSNR V'
+    sheet2.cell(row = 1, column = psnr_col+3).value = 'YUV-PSNR'
     mc = 1
 if 'ssim' in args['metric']:
-    sheet2.cell(row = 1, column = psnr_col+1).value = 'SSIM'
+    sheet2.cell(row = 1, column = psnr_col+4).value = 'SSIM Y'
+    sheet2.cell(row = 1, column = psnr_col+5).value = 'SSIM U'
+    sheet2.cell(row = 1, column = psnr_col+6).value = 'SSIM V'
+    sheet2.cell(row = 1, column = psnr_col+7).value = 'YUV-SSIM'
     mc = 2
 if 'vmaf' in args['metric']:
-    sheet2.cell(row = 1, column = psnr_col+2).value = 'VMAF'
+    sheet2.cell(row = 1, column = psnr_col+8).value = 'VMAF'
     mc = 3
 wb2.save(args["results"]) 
 projPath = os.path.dirname(__file__)
