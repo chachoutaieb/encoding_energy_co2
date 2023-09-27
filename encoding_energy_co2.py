@@ -212,22 +212,22 @@ class video_encoding:
         if  platform == 'CPU':
             if speed == 'slower':
                 confpath = VVenC_path+'/cfg/randomaccess_slow.cfg'
-                confpath64 = self.project_path+'/output/randomaccess_slow64.cfg'
+                confpath64 = self.project_path+'/data/randomaccess_slow64.cfg'
                 preset = ['veryslow', '0', '3', 'slow']
                 interval_codec = [0.3, 0.3, 2, 3, 0.3]
             elif speed == 'medium':
                 confpath = VVenC_path+'/cfg/randomaccess_medium.cfg'
-                confpath64 = self.project_path+'/output/randomaccess_medium64.cfg'
+                confpath64 = self.project_path+'/data/randomaccess_medium64.cfg'
                 preset = ['medium', '3', '6', 'medium']
                 interval_codec = [0.06,  0.15, 0.5, 3, 0.5]
             elif speed == 'fast':
                 confpath = VVenC_path+'/cfg/randomaccess_fast.cfg'
-                confpath64 =  self.project_path+'/output/randomaccess_fast64.cfg'
+                confpath64 =  self.project_path+'/data/randomaccess_fast64.cfg'
                 preset = ['veryfast', '6', '10', 'fast']
                 interval_codec = [0.04,  0.1, 0.5, 1, 0.2]
             elif speed == 'faster':
                 confpath = VVenC_path+'/cfg/randomaccess_faster.cfg'
-                confpath64 =  self.project_path+'/output/randomaccess_faster64.cfg'
+                confpath64 =  self.project_path+'/data/randomaccess_faster64.cfg'
                 preset = ['ultrafast', '8', '12', 'faster']
                 interval_codec = [0.04,  0.1, 0.2, 1, 0.2]
             if intrvalv != None:
