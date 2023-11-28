@@ -7,7 +7,7 @@ For more information on the project, you can find additional details [here](http
 
 - [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
 - [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
-- Install ffmpeg >= 5.2
+- Install ffmpeg (version >= 5.2)
 - [Install CodeCarbon](https://github.com/mlco2/codecarbon) (version 2.3.1) 
 
 ```bash
