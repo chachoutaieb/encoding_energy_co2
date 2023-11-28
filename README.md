@@ -5,6 +5,10 @@ For more information on the project, you can find additional details [here](http
 
 ## Install 
 
+- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
+- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
+- Install ffmpeg >= 5.2
+- [Install CodeCarbon](https://github.com/mlco2/codecarbon) (version 2.3.1) 
 
 ```bash
 git clone https://github.com/chachoutaieb/encoding_energy_co2.git
@@ -12,9 +16,6 @@ pip3 install -r requirements.txt
 sudo chmod a=r /sys/class/powercap/intel-rapl:0/energy_uj
 
 ```
-- [Install VVenC](https://github.com/fraunhoferhhi/vvenc/)
-- [Install VVdeC](https://github.com/fraunhoferhhi/vvdec)
-- Install ffmpeg >= 5.2
 
 
 
