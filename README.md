@@ -75,7 +75,19 @@ green : Encoded video is ready
 |     BasketballDrillText_800k_50fps_libx265_faster.mp4      |  4.751   |     871     | 0.0038191997 | 0.000385739 | 32.05  |  0.86  | 73.25  |
 +------------------------------------------------------------+----------+-------------+--------------+-------------+--------+--------+--------+
 ```
+## Citing
 
+Please use the following citation when referencing our work in literature:
+
+```bibtex
+@article{chachou2024energy,
+  title={Energy Consumption and Carbon Emissions of Modern Software Video Encoders},
+  author={Chachou, Taieb and Hamidouche, Wassim and Fezza, Sid Ahmed and Belalem, Ghalem},
+  journal={IEEE Consumer Electronics Magazine},
+  year={2023},
+  publisher={IEEE}
+}
+```
 
 ## Results
 
