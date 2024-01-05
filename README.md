@@ -80,7 +80,7 @@ green : Encoded video is ready
 We kindly ask you to cite our paper if you find the repository useful to your work:
 
 ```bibtex
-@article{chachou2024energy,
+@article{chachou2023energyenc,
   title={Energy Consumption and Carbon Emissions of Modern Software Video Encoders},
   author={Chachou, Taieb and Hamidouche, Wassim and Fezza, Sid Ahmed and Belalem, Ghalem},
   journal={IEEE Consumer Electronics Magazine},
